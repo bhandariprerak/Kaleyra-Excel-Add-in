@@ -6,13 +6,13 @@ export default class Header extends React.Component {
     const { title, logo, message } = this.props;
 
     return (
-      <section className="ms-welcome__header ms-u-fadeIn500">
-        <img width="100" src={logo} alt={title} title={title} />
-        <h1 className="ms-fontSize-su ms-fontWeight-light ms-fontColor-neutralPrimary">{message}</h1>
+      <section>
+        <img width="100" src={logo} alt={title} title={title} style={{"marginLeft":"10px", "marginTop":"10px", "marginBottom":"20px"}}/>
       </section>
     );
   }
 }
+
 
 Header.propTypes = {
   title: PropTypes.string,
