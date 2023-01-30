@@ -69,6 +69,9 @@ const KaleyraForm = (props) => {
     data.replaceables.forEach((ele) => {
       str = str + ele.label + "|";
     });
+
+    console.log("Prepared replaceables");
+
     const final_body = prepare_sms_body(Map_Ranges, str);
 
     var data = JSON.stringify({
@@ -79,6 +82,7 @@ const KaleyraForm = (props) => {
       template_id: `${props.template?.template_id}`,
       unicode: "Auto",
       callback_profile_id: data.callbackProfileId,
+      prefix: data.Prefix,
       sms: final_body,
     });
 
@@ -91,6 +95,8 @@ const KaleyraForm = (props) => {
       },
       data: data,
     };
+
+    console.log("Api call triggered");
 
     axios(config)
       .then(function (response) {
@@ -127,58 +133,6 @@ const KaleyraForm = (props) => {
     processBaseMessage();
   }, []);
 
-  // const getNumbers = async (label, index) => {
-  //   let numbers = [];
-  //   let num_cols = 0;
-  //   let formattednumbers = [];
-  //   try {
-  //     await Excel.run(async (context) => {
-  //       /**
-  //        * Insert your Excel code here
-  //        */
-  //       const range = context.workbook.getSelectedRange();
-  //       // Read the range address
-
-  //       range.load("address");
-  //       range.load("values");
-  //       range.load("columnCount");
-
-  //       // Update the fill color
-  //       range.format.fill.color = "yellow";
-
-  //       await context.sync();
-  //       numbers = range.values;
-  //       num_cols = range.columnCount;
-  //     });
-  //     if (num_cols <= 1) {
-  //       switch (label) {
-  //         case "mobileNumber":
-  //           numbers.forEach((num) => {
-  //             if (Number.isInteger(num[0]) && num[0].toString().length <= 12) {
-  //               formattednumbers.push(num[0]);
-  //             }
-  //           });
-  //           setValidnums(Array.from(new Set([...validNums, ...formattednumbers])));
-  //           break;
-
-  //         default:
-  //           console.log("default case");
-  //           numbers.forEach((num) => {
-  //             formattednumbers.push(num[0]);
-  //           });
-  //           setreplacevalues({ ...replacevalues, [label]: [...replacevalues[label], ...formattednumbers] });
-  //           setValue(`replaceables[${index}].value`, [...replacevalues[label], ...formattednumbers]);
-  //           break;
-  //       }
-  //     } else {
-  //       setErrormessage({ message: "Select only one column!", var: "danger" });
-  //       setopentoast(true);
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -198,34 +152,22 @@ const KaleyraForm = (props) => {
     const final_sms_body = [];
     const message = props.template?.content;
     const replace_pattern = new RegExp(`${str.slice(0, -1)}`, `gim`);
+
     all_data.get("MobileNumbers").ColValues.forEach((ele, i) => {
       final_sms_body.push({
         to: ele,
-        body: message.replace(replace_pattern, function (matched) {
-          return all_data.get(matched).ColValues[i] !== ""
-            ? all_data.get(matched).ColValues[i]
-            : all_data.get(matched).defaultValue;
-        }),
+        body: str
+          ? message.replace(replace_pattern, function (matched) {
+              return all_data.get(matched)?.ColValues[i] !== ""
+                ? all_data.get(matched)?.ColValues[i]
+                : all_data.get(matched)?.defaultValue;
+            })
+          : message,
       });
     });
-    console.log(final_sms_body);
+    console.log("Final message body prepared");
     return final_sms_body;
   };
-
-  // const resetNumbers = (label, index) => {
-  //   switch (label) {
-  //     case "mobileNumber":
-  //       setmobileNumber("");
-  //       setValidnums([]);
-  //       setValue("mobileNumbers", "");
-  //       break;
-
-  //     default:
-  //       setreplacevalues({ ...replacevalues, [label]: "" });
-  //       setValue(`replaceables[${index}].value`, "");
-  //       break;
-  //   }
-  // };
 
   return (
     <div>
@@ -343,9 +285,11 @@ const KaleyraForm = (props) => {
             <Controller
               control={control}
               name="callbackProfileId"
-              rules={{
-                required: true,
-              }}
+              // rules={
+              //   {
+              //     required: true,
+              //   }
+              // }
               render={({ field }) => (
                 <TextField
                   {...field}
@@ -353,7 +297,7 @@ const KaleyraForm = (props) => {
                     margin: "8px",
                     flex: "8 0",
                   }}
-                  placeholder={"Enter Callback Profile ID"}
+                  placeholder={"(Optional)Enter Callback Profile ID"}
                 />
               )}
             />
@@ -364,6 +308,41 @@ const KaleyraForm = (props) => {
                 style={{ "margin-bottom": "8px", height: "fit-content", pointerEvents: "none" }}
               >
                 Callback Profile ID
+              </Button>
+            </div>
+          </div>
+          {formerrors.callbackProfileId && formerrors.callbackProfileId.type === "required" && (
+            <Alert color="danger" variant="outlined" size="sm">
+              *The Call Back profile ID is required.
+            </Alert>
+          )}
+          <div style={{ display: "flex" }}>
+            <Controller
+              control={control}
+              name="Prefix"
+              // rules={
+              //   {
+              //     required: true,
+              //   }
+              // }
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  style={{
+                    margin: "8px",
+                    flex: "8 0",
+                  }}
+                  placeholder={"(Optional)Enter Prefix"}
+                />
+              )}
+            />
+            <div style={{ display: "flex", flex: "2 0", alignItems: "center" }}>
+              <Button
+                size="sm"
+                variant="plain"
+                style={{ "margin-bottom": "8px", height: "fit-content", pointerEvents: "none" }}
+              >
+                Prefix
               </Button>
             </div>
           </div>
@@ -430,20 +409,6 @@ const KaleyraForm = (props) => {
             </Alert>
           )}
           {!isLoading && (
-            // <input
-            //   type="submit"
-            //   style={{
-            //     backgroundColor: "#0066A2",
-            //     color: "white",
-            //     border: "none",
-            //     "font-weight": "bold",
-            //     cursor: "pointer",
-            //     width: "80px",
-            //     height: "48px",
-            //     "border-radius": "25px",
-            //     marginTop: "10px",
-            //   }}
-            // />
             <div>
               <button class="button" onClick={handleSubmit(onSubmit)}>
                 <span>Submit </span>
