@@ -49,12 +49,14 @@ const UpdatedKaleyraForm = (props) => {
         /> */}
         <CssVarsProvider>
           <div>
-            <IoArrowBackCircleOutline
-              style={{ "font-size": "xx-large", color: "#383887" }}
-              onClick={() => {
-                props.goBack(false);
-              }}
-            />
+            <a href="#">
+              <IoArrowBackCircleOutline
+                style={{ "font-size": "xx-large", color: "#383887" }}
+                onClick={() => {
+                  props.goBack(false);
+                }}
+              />
+            </a>
           </div>
 
           <div style={{ display: "flex" }}>
