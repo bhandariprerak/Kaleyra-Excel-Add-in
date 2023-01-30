@@ -10,9 +10,7 @@ export default class Header extends React.Component {
         style={{
           display: "flex",
           height: "75px",
-          // "border-bottom": "1px solid black",
-          "margin-bottom": "2rem",
-          // backgroundColor: "#c9e0f5",
+          // "margin-bottom": "2rem",
         }}
       >
         <div
@@ -24,12 +22,12 @@ export default class Header extends React.Component {
           }}
         >
           <img
-            width="100"
-            // height="50px"
+            width="100px"
+            height="50px"
             src={logo}
             alt={"Kaleyra_Logo"}
             title={"Kaleyra"}
-            // style={{ borderRadius: "20px" }}
+            style={{ borderRadius: "20px" }}
           />
         </div>
         <div style={{ flex: "1 0" }}></div>

@@ -78,6 +78,7 @@ const KaleyraForm = (props) => {
       from: props.sender_id.value,
       template_id: `${props.template?.template_id}`,
       unicode: "Auto",
+      callback_profile_id: data.callbackProfileId,
       sms: final_body,
     });
 
@@ -268,7 +269,7 @@ const KaleyraForm = (props) => {
                             flex: "4 0",
                             "min-width": "100px",
                           }}
-                          placeholder={"Enter default value"}
+                          placeholder={"Enter deafult Value"}
                           className={`no-form-error ${formerrors.replaceables?.[index]?.value ? "form-error" : ""}`}
                         />
                       )}
@@ -281,7 +282,11 @@ const KaleyraForm = (props) => {
                         flex: "2 1",
                       }}
                     >
-                      <Button size="sm" variant="plain" style={{ "margin-bottom": "8px", height: "fit-content" }}>
+                      <Button
+                        size="sm"
+                        variant="plain"
+                        style={{ "margin-bottom": "8px", height: "fit-content", pointerEvents: "none" }}
+                      >
                         {`${item.label}`}
                       </Button>
                     </div>
@@ -319,7 +324,7 @@ const KaleyraForm = (props) => {
                 />
               )}
             />
-            <div style={{ flex: "2 0" }}>
+            <div style={{ display: "flex", flex: "2 0", alignItems: "center" }}>
               <Button
                 size="sm"
                 variant="plain"
@@ -332,6 +337,39 @@ const KaleyraForm = (props) => {
           {formerrors.mobileNumber && formerrors.mobileNumber.type === "required" && (
             <Alert color="danger" variant="outlined" size="sm">
               *The Mobile Number column is required.
+            </Alert>
+          )}
+          <div style={{ display: "flex" }}>
+            <Controller
+              control={control}
+              name="callbackProfileId"
+              rules={{
+                required: true,
+              }}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  style={{
+                    margin: "8px",
+                    flex: "8 0",
+                  }}
+                  placeholder={"Enter Callback Profile ID"}
+                />
+              )}
+            />
+            <div style={{ display: "flex", flex: "2 0", alignItems: "center" }}>
+              <Button
+                size="sm"
+                variant="plain"
+                style={{ "margin-bottom": "8px", height: "fit-content", pointerEvents: "none" }}
+              >
+                Callback Profile ID
+              </Button>
+            </div>
+          </div>
+          {formerrors.callbackProfileId && formerrors.callbackProfileId.type === "required" && (
+            <Alert color="danger" variant="outlined" size="sm">
+              *The Call Back profile ID is required.
             </Alert>
           )}
           <div style={{ display: "flex" }}>
@@ -371,7 +409,7 @@ const KaleyraForm = (props) => {
                 />
               )}
             />
-            <div style={{ flex: "2 0" }}>
+            <div style={{ display: "flex", flex: "2 0", alignItems: "center" }}>
               <Button
                 size="sm"
                 variant="plain"
@@ -392,20 +430,25 @@ const KaleyraForm = (props) => {
             </Alert>
           )}
           {!isLoading && (
-            <input
-              type="submit"
-              style={{
-                backgroundColor: "#0066A2",
-                color: "white",
-                border: "none",
-                "font-weight": "bold",
-                cursor: "pointer",
-                width: "80px",
-                height: "48px",
-                "border-radius": "25px",
-                marginTop: "10px",
-              }}
-            />
+            // <input
+            //   type="submit"
+            //   style={{
+            //     backgroundColor: "#0066A2",
+            //     color: "white",
+            //     border: "none",
+            //     "font-weight": "bold",
+            //     cursor: "pointer",
+            //     width: "80px",
+            //     height: "48px",
+            //     "border-radius": "25px",
+            //     marginTop: "10px",
+            //   }}
+            // />
+            <div>
+              <button class="button" onClick={handleSubmit(onSubmit)}>
+                <span>Submit </span>
+              </button>
+            </div>
           )}
         </form>
       </CssVarsProvider>

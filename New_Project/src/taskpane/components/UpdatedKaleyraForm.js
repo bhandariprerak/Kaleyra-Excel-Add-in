@@ -8,6 +8,7 @@ import { IoArrowBackCircleOutline } from "react-icons/io5";
 import Template_Card from "./Template_Card";
 import KaleyraForm from "./KaleyraForm";
 import { LinearProgress } from "@mui/material";
+import KaleyraFooter from "./KaleyraFooter";
 
 const UpdatedKaleyraForm = (props) => {
   const [senderid, setsenderid] = useState({});
@@ -36,77 +37,86 @@ const UpdatedKaleyraForm = (props) => {
   }, [template]);
 
   return (
-    <div style={{ width: "80%", margin: "auto" }}>
+    <div style={{ position: "relative" }}>
       <img
         src="../../../assets/background.png"
         style={{ position: "absolute", "z-index": "-1", opacity: "0.35", top: "0" }}
       />
-      <CssVarsProvider>
-        <div>
-          <IoArrowBackCircleOutline
-            style={{ "font-size": "xx-large", color: "#383887" }}
-            onClick={() => {
-              props.goBack(false);
-            }}
-          />
-        </div>
-
-        <div style={{ display: "flex" }}>
-          <div style={{ margin: "8px", flex: "8 2" }}>
-            <AutocompleteSelect
-              setsender={(sender) => {
-                setsenderid(sender);
-                settemplate({});
+      <div style={{ width: "80%", margin: "auto", paddingBottom: "75px" }}>
+        {/* <img
+          src="../../../assets/background.png"
+          style={{ position: "absolute", "z-index": "-1", opacity: "0.35", top: "0" }}
+        /> */}
+        <CssVarsProvider>
+          <div>
+            <IoArrowBackCircleOutline
+              style={{ "font-size": "xx-large", color: "#383887" }}
+              onClick={() => {
+                props.goBack(false);
               }}
-              senderidOptions={props.formatted_senderid_options}
-              value={senderid}
             />
           </div>
-          <div style={{ display: "flex", "justify-content": "center", "flex-direction": "column", flex: "2 1" }}>
-            <Button
-              size="sm"
-              variant="plain"
-              style={{ "margin-bottom": "8px", height: "fit-content", pointerEvents: "none" }}
-            >
-              Sender ID
-            </Button>
+
+          <div style={{ display: "flex" }}>
+            <div style={{ margin: "8px", flex: "8 2" }}>
+              <AutocompleteSelect
+                setsender={(sender) => {
+                  setsenderid(sender);
+                  settemplate({});
+                }}
+                senderidOptions={props.formatted_senderid_options}
+                value={senderid}
+              />
+            </div>
+            <div style={{ display: "flex", "justify-content": "center", "flex-direction": "column", flex: "2 1" }}>
+              <Button
+                size="sm"
+                variant="plain"
+                style={{ "margin-bottom": "8px", height: "fit-content", pointerEvents: "none" }}
+              >
+                Sender ID
+              </Button>
+            </div>
           </div>
-        </div>
-        <div style={{ display: "flex" }}>
-          <div style={{ margin: "8px", flex: "8 2" }}>
-            <AutocompleteSelect
-              setsender={(template) => settemplate(template)}
-              senderidOptions={formatedTemplates}
-              value={template}
+          <div style={{ display: "flex" }}>
+            <div style={{ margin: "8px", flex: "8 2" }}>
+              <AutocompleteSelect
+                setsender={(template) => settemplate(template)}
+                senderidOptions={formatedTemplates}
+                value={template}
+              />
+            </div>
+            <div style={{ display: "flex", "justify-content": "center", "flex-direction": "column", flex: "2 1" }}>
+              <Button
+                size="sm"
+                variant="plain"
+                style={{ "margin-bottom": "8px", height: "fit-content", pointerEvents: "none" }}
+              >
+                Select Template
+              </Button>
+            </div>
+          </div>
+          {Object.keys(template).length !== 0 && (
+            <Template_Card
+              title={template.title || ""}
+              content={template.content || ""}
+              created_at={template.created_at || ""}
+              full_name={template.full_name || ""}
             />
-          </div>
-          <div style={{ display: "flex", "justify-content": "center", "flex-direction": "column", flex: "2 1" }}>
-            <Button
-              size="sm"
-              variant="plain"
-              style={{ "margin-bottom": "8px", height: "fit-content", pointerEvents: "none" }}
-            >
-              Select Template
-            </Button>
-          </div>
+          )}
+        </CssVarsProvider>
+        <div>
+          {Object.keys(template).length !== 0 &&
+            Object.keys(senderid).length !== 0 &&
+            (loading ? (
+              <LinearProgress style={{ margin: "10px" }} />
+            ) : (
+              <KaleyraForm template={template} sender_id={senderid} />
+            ))}
         </div>
-        {Object.keys(template).length !== 0 && (
-          <Template_Card
-            title={template.title || ""}
-            content={template.content || ""}
-            created_at={template.created_at || ""}
-            full_name={template.full_name || ""}
-          />
-        )}
-      </CssVarsProvider>
-      <div>
-        {Object.keys(template).length !== 0 &&
-          Object.keys(senderid).length !== 0 &&
-          (loading ? (
-            <LinearProgress style={{ margin: "10px" }} />
-          ) : (
-            <KaleyraForm template={template} sender_id={senderid} />
-          ))}
+      </div>
+      <div style={{ position: "fixed", width: "100%", bottom: "0" }}>
+        <KaleyraFooter />
       </div>
     </div>
   );

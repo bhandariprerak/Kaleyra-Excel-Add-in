@@ -31,8 +31,6 @@ const LoginForm = (props) => {
   };
 
   const onSubmitLogin = (data) => {
-    //Todo - pass the api key and sid to fetch and verify
-
     setisloading(true);
 
     var config = {
@@ -53,7 +51,7 @@ const LoginForm = (props) => {
       })
       .catch(function (error) {
         setopentoast(true);
-        setErrormessage({ message: error?.response?.data?.error.error, var: "danger" }); 
+        setErrormessage({ message: error?.response?.data?.error.error, var: "danger" });
         setisloading(false);
       });
   };
@@ -62,7 +60,6 @@ const LoginForm = (props) => {
     var config_template = {
       method: "get",
       url: `https://api.in.kaleyra.io/v1/${val.sidKey}/messages/template?status={"is":1}`,
-      // url: `https://cloud-api-stage.smsinfini.com/v1/${val.sidKey}/messages/template?status={"is":1}`,
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         "api-key": val.apiKey,
@@ -93,13 +90,45 @@ const LoginForm = (props) => {
       style={{
         width: "80%",
         margin: "auto",
-        alignContent: "center",
       }}
     >
       <img
         src="../../../assets/background2.png"
-        style={{ position: "absolute", "z-index": "-1", opacity: "0.3", bottom: "0" }}
+        style={{ position: "absolute", "z-index": "-1", opacity: "0.5", top: "0" }}
       />
+      <div
+        style={{
+          dispaly: "flex",
+          border: "2px solid #005a9e",
+          "border-radius": "10px",
+          padding: "10px",
+          "background-color": "aliceblue",
+          opacity: 0.85,
+        }}
+      >
+        <div style={{ display: "block", textAlign: "center" }}>
+          <span className="type" style={{ "--n": 150, color: "red", fontSize: "x-large" }}>
+            <b>Welcome!!</b>
+          </span>
+        </div>
+        <div style={{ display: "inline-block" }}>
+          <p style={{ textAlign: "justify" }}>
+            <span className="type" style={{ "--n": 250 }}>
+              Kaleyra Excel Add-In lets users to send SMS messages directly from their Excel Spreadsheet.
+            </span>
+          </p>
+          <p>
+            <span className="type" style={{ "--n": 225 }}>
+              Kaleyra Excel Add-In makes it easy to send personalized texts to all your contacts in an instant.
+            </span>
+          </p>
+          {/* <div style={{ display: "inline-block" }}> */}
+          <p className="type" style={{ "--n": 150 }}>
+            You can register for an API Key <a href="https://developers.kaleyra.io/docs/generating-an-api-key">here</a>.
+          </p>
+          {/* </div> */}
+        </div>
+      </div>
       <CssVarsProvider>
         <form onSubmit={handleSubmit(onSubmitLogin)}>
           <div style={{ display: "flex" }}>
@@ -169,21 +198,11 @@ const LoginForm = (props) => {
             </Alert>
           )}
           {!isLoading && (
-            <input
-              type="submit"
-              value={"Next"}
-              style={{
-                backgroundColor: "#0066A2",
-                color: "white",
-                border: "none",
-                fontWeight: "bold",
-                cursor: "pointer",
-                width: "80px",
-                height: "48px",
-                borderRadius: "25px",
-                marginTop: "10px",
-              }}
-            />
+            <div>
+              <button class="button" onClick={handleSubmit(onSubmitLogin)}>
+                <span>Next </span>
+              </button>
+            </div>
           )}
         </form>
       </CssVarsProvider>

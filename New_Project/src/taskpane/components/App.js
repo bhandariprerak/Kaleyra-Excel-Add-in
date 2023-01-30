@@ -17,24 +17,24 @@ class App extends React.Component {
     };
   }
 
-  // componentDidMount() {
-  //   this.setState({
-  //     listItems: [
-  //       {
-  //         icon: "Ribbon",
-  //         primaryText: "Achieve more with Office integration",
-  //       },
-  //       {
-  //         icon: "Unlock",
-  //         primaryText: "Unlock features and functionality",
-  //       },
-  //       {
-  //         icon: "Design",
-  //         primaryText: "Create and visualize like a pro",
-  //       },
-  //     ],
-  //   });
-  // }
+  componentDidMount() {
+    this.setState({
+      listItems: [
+        {
+          icon: "Ribbon",
+          primaryText: "Achieve more with Office integration",
+        },
+        {
+          icon: "Unlock",
+          primaryText: "Unlock features and functionality",
+        },
+        {
+          icon: "Design",
+          primaryText: "Create and visualize like a pro",
+        },
+      ],
+    });
+  }
 
   click = async () => {
     try {
@@ -65,7 +65,7 @@ class App extends React.Component {
       return (
         <Progress
           title={title}
-          logo={require("./../../../assets/Kaleyra.png")}
+          logo={require("./../../../assets/logo-filled.png")}
           message="Please sideload your addin to see app body."
         />
       );
@@ -73,9 +73,8 @@ class App extends React.Component {
 
     return (
       <div>
-        <Header logo={require("./../../../assets/Kaleyra-Logo.png")} title={this.props.title} message="Welcome" />
+        <Header logo={require("./../../../assets/Kaleyra_Logo_Logo.jpg")} title={this.props.title} message="Welcome" />
         {!loggedin ? <LoginForm /> : <UpdatedKaleyraForm />}
-        <KaleyraFooter />
       </div>
     );
   }
