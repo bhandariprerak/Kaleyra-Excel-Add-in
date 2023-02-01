@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import { API_KEY, SID, LOGIN, Sender_ID, Template_Data, Formatted_Sender_ID } from "../components/Redux/Actions";
 import { Snackbar, LinearProgress } from "@mui/material";
 import axios from "axios";
+import KaleyraFooter from "./KaleyraFooter";
 
 const LoginForm = (props) => {
   const defaultValues = {
@@ -86,136 +87,144 @@ const LoginForm = (props) => {
   };
 
   return (
-    <div
-      style={{
-        width: "80%",
-        margin: "auto",
-      }}
-    >
-      <img
-        src="../../../assets/background2.png"
-        style={{ position: "absolute", "z-index": "-1", opacity: "0.5", top: "0" }}
-      />
+    <div>
       <div
         style={{
-          dispaly: "flex",
-          border: "2px solid #005a9e",
-          "border-radius": "10px",
-          padding: "10px",
-          "background-color": "aliceblue",
-          opacity: 0.85,
+          width: "80%",
+          margin: "auto",
+          paddingBottom: "75px",
         }}
       >
-        <div style={{ display: "block", textAlign: "center" }}>
-          <span className="type" style={{ "--n": 150, color: "red", fontSize: "x-large" }}>
-            <b>Welcome!!</b>
-          </span>
-        </div>
-        <div style={{ display: "inline-block" }}>
-          <p style={{ textAlign: "justify" }}>
-            <span className="type" style={{ "--n": 250 }}>
-              Kaleyra Excel Add-In lets users to send SMS messages directly from their Excel Spreadsheet.
+        <img
+          src="../../../assets/background2.png"
+          // src="../../../assets/Homepage-BG.jpg"
+          style={{ position: "absolute", "z-index": "-1", opacity:"1", top: "0" }}
+        />
+        <div
+          style={{
+            dispaly: "flex",
+            border: "2px solid #005a9e",
+            "border-radius": "10px",
+            padding: "10px",
+            "background-color": "aliceblue",
+            opacity: 0.85,
+          }}
+        >
+          <div style={{ display: "block", textAlign: "center" }}>
+            <span className="type" style={{ "--n": 150, color: "red", fontSize: "x-large" }}>
+              <b>Welcome</b>
             </span>
-          </p>
-          <p>
-            <span className="type" style={{ "--n": 225 }}>
-              Kaleyra Excel Add-In makes it easy to send personalized texts to all your contacts in an instant.
-            </span>
-          </p>
-          {/* <div style={{ display: "inline-block" }}> */}
-          <p className="type" style={{ "--n": 150 }}>
-            You can register for an API Key <a href="https://developers.kaleyra.io/docs/generating-an-api-key">here</a>.
-          </p>
-          {/* </div> */}
+          </div>
+          <div style={{ display: "inline-block" }}>
+            <p style={{ textAlign: "justify" }}>
+              <span className="type" style={{ "--n": 250 }}>
+                Kaleyra Excel Add-In lets users to send SMS messages directly from their Excel Spreadsheet.
+              </span>
+            </p>
+            <p>
+              <span className="type" style={{ "--n": 225 }}>
+                Kaleyra Excel Add-In makes it easy to send personalized texts to all your contacts in an instant.
+              </span>
+            </p>
+            {/* <div style={{ display: "inline-block" }}> */}
+            <p className="type" style={{ "--n": 150 }}>
+              You can register for an API Key{" "}
+              <a href="https://developers.kaleyra.io/docs/generating-an-api-key">here</a>.
+            </p>
+            {/* </div> */}
+          </div>
         </div>
+        <CssVarsProvider>
+          <form onSubmit={handleSubmit(onSubmitLogin)}>
+            <div style={{ display: "flex" }}>
+              <Controller
+                control={control}
+                name="apiKey"
+                rules={{
+                  required: true,
+                }}
+                defaultValue={props.apiKey}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    style={{ margin: "8px", flex: "8 0" }}
+                    placeholder={"Enter API Key"}
+                    autoComplete={"off"}
+                    className={`no-form-error ${formerrors.apikey ? "form-error" : ""}`}
+                  />
+                )}
+              />
+              <div style={{ display: "flex", "justify-content": "center", "flex-direction": "column", flex: "2 0" }}>
+                <Button
+                  size="sm"
+                  variant="plain"
+                  style={{ "margin-bottom": "8px", height: "fit-content", pointerEvents: "none" }}
+                >
+                  API-Key
+                </Button>
+              </div>
+            </div>
+            {formerrors.apiKey && formerrors.apiKey.type === "required" && (
+              <Alert color="danger" variant="outlined" size="sm">
+                *The API Key is required.
+              </Alert>
+            )}
+            <div style={{ display: "flex" }}>
+              <Controller
+                control={control}
+                name="sidKey"
+                rules={{
+                  required: true,
+                }}
+                defaultValue={props.sid}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    style={{ margin: "8px", flex: "8 0" }}
+                    placeholder={"Enter SID"}
+                    autoComplete={"off"}
+                    className={`no-form-error ${formerrors.sidKey ? "form-error" : ""}`}
+                  />
+                )}
+              />
+              <div style={{ display: "flex", "justify-content": "center", "flex-direction": "column", flex: "2 0" }}>
+                <Button
+                  size="sm"
+                  variant="plain"
+                  style={{ "margin-bottom": "8px", height: "fit-content", pointerEvents: "none" }}
+                >
+                  SID
+                </Button>
+              </div>
+            </div>
+            {formerrors.sidKey && formerrors.sidKey.type === "required" && (
+              <Alert color="danger" variant="outlined" size="sm">
+                *The SID is required.
+              </Alert>
+            )}
+            {!isLoading && (
+              <div>
+                <button class="button" onClick={handleSubmit(onSubmitLogin)}>
+                  <span>Login </span>
+                </button>
+              </div>
+            )}
+          </form>
+        </CssVarsProvider>
+        {isLoading && (
+          <div>
+            <LinearProgress />
+          </div>
+        )}
+        <Snackbar open={opentoast} autoHideDuration={5000} onClose={handleClose}>
+          <Alert onClose={handleClose} color={Errormessage.var} sx={{ width: "100%" }}>
+            {Errormessage.message}
+          </Alert>
+        </Snackbar>
       </div>
-      <CssVarsProvider>
-        <form onSubmit={handleSubmit(onSubmitLogin)}>
-          <div style={{ display: "flex" }}>
-            <Controller
-              control={control}
-              name="apiKey"
-              rules={{
-                required: true,
-              }}
-              defaultValue={props.apiKey}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  style={{ margin: "8px", flex: "8 0" }}
-                  placeholder={"Enter API Key"}
-                  autoComplete={"off"}
-                  className={`no-form-error ${formerrors.apikey ? "form-error" : ""}`}
-                />
-              )}
-            />
-            <div style={{ display: "flex", "justify-content": "center", "flex-direction": "column", flex: "2 0" }}>
-              <Button
-                size="sm"
-                variant="plain"
-                style={{ "margin-bottom": "8px", height: "fit-content", pointerEvents: "none" }}
-              >
-                API-Key
-              </Button>
-            </div>
-          </div>
-          {formerrors.apiKey && formerrors.apiKey.type === "required" && (
-            <Alert color="danger" variant="outlined" size="sm">
-              **The API Key is required.
-            </Alert>
-          )}
-          <div style={{ display: "flex" }}>
-            <Controller
-              control={control}
-              name="sidKey"
-              rules={{
-                required: true,
-              }}
-              defaultValue={props.sid}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  style={{ margin: "8px", flex: "8 0" }}
-                  placeholder={"Enter SID"}
-                  autoComplete={"off"}
-                  className={`no-form-error ${formerrors.sidKey ? "form-error" : ""}`}
-                />
-              )}
-            />
-            <div style={{ display: "flex", "justify-content": "center", "flex-direction": "column", flex: "2 0" }}>
-              <Button
-                size="sm"
-                variant="plain"
-                style={{ "margin-bottom": "8px", height: "fit-content", pointerEvents: "none" }}
-              >
-                SID
-              </Button>
-            </div>
-          </div>
-          {formerrors.sidKey && formerrors.sidKey.type === "required" && (
-            <Alert color="danger" variant="outlined" size="sm">
-              **The SID is required.
-            </Alert>
-          )}
-          {!isLoading && (
-            <div>
-              <button class="button" onClick={handleSubmit(onSubmitLogin)}>
-                <span>Next </span>
-              </button>
-            </div>
-          )}
-        </form>
-      </CssVarsProvider>
-      {isLoading && (
-        <div>
-          <LinearProgress />
-        </div>
-      )}
-      <Snackbar open={opentoast} autoHideDuration={5000} onClose={handleClose}>
-        <Alert onClose={handleClose} color={Errormessage.var} sx={{ width: "100%" }}>
-          {Errormessage.message}
-        </Alert>
-      </Snackbar>
+      <div style={{ position: "fixed", width: "100%", bottom: "0" }}>
+        <KaleyraFooter />
+      </div>
     </div>
   );
 };

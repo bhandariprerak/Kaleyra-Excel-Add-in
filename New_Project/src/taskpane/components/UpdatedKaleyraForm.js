@@ -39,12 +39,12 @@ const UpdatedKaleyraForm = (props) => {
   return (
     <div style={{ position: "relative" }}>
       <img
-        src="../../../assets/background.png"
+        src="../../../assets/Homepage-BG.jpg"
         style={{ position: "absolute", "z-index": "-1", opacity: "0.35", top: "0" }}
       />
       <div style={{ width: "80%", margin: "auto", paddingBottom: "75px" }}>
         {/* <img
-          src="../../../assets/background.png"
+          src="../../../assets/Homepage-BG.jpg"
           style={{ position: "absolute", "z-index": "-1", opacity: "0.35", top: "0" }}
         /> */}
         <CssVarsProvider>

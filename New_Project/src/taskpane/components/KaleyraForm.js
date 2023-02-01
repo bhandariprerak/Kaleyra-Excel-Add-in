@@ -36,6 +36,7 @@ const KaleyraForm = (props) => {
       ColValues: "",
     });
 
+    // here we map the custom variables with their values and color the custom varibales yellow
     try {
       await Excel.run(async (context) => {
         const sheet = context.workbook.worksheets.getActiveWorksheet();
@@ -52,6 +53,7 @@ const KaleyraForm = (props) => {
     } catch (error) {
       console.error(error);
     }
+    // here we map the custom variables object to their mobile numbers and color the mobile numbers column yellow
     try {
       await Excel.run(async (context) => {
         const sheet = context.workbook.worksheets.getActiveWorksheet();
@@ -72,12 +74,18 @@ const KaleyraForm = (props) => {
 
     console.log("Prepared replaceables");
 
+    // making the batch of 500
+    // var i = 0;
+    // for(let j=0; j< Map_Ranges.length; j++){ 
+      // var batchData = Map_Ranges.slice(i, i+500);
+
     const final_body = prepare_sms_body(Map_Ranges, str);
+    // const final_body = prepare_sms_body(batchData, str);
 
     var data = JSON.stringify({
       channel: "SMS",
       type: props.template?.purpose,
-      source: "API",
+      source: "MSEXCEL",
       from: props.sender_id.value,
       template_id: `${props.template?.template_id}`,
       unicode: "Auto",
@@ -96,7 +104,7 @@ const KaleyraForm = (props) => {
       data: data,
     };
 
-    console.log("Api call triggered");
+    console.log("API call triggered");
 
     axios(config)
       .then(function (response) {
@@ -200,9 +208,9 @@ const KaleyraForm = (props) => {
                     <Controller
                       control={control}
                       name={`replaceables[${index}].defaultValue`}
-                      rules={{
-                        required: true,
-                      }}
+                      // rules={{
+                      //   required: true,
+                      // }}
                       render={({ field }) => (
                         <TextField
                           {...field}
@@ -211,7 +219,7 @@ const KaleyraForm = (props) => {
                             flex: "4 0",
                             "min-width": "100px",
                           }}
-                          placeholder={"Enter deafult Value"}
+                          placeholder={"Enter default Value"}
                           className={`no-form-error ${formerrors.replaceables?.[index]?.value ? "form-error" : ""}`}
                         />
                       )}
