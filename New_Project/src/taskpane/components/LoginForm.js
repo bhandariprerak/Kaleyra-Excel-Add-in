@@ -120,17 +120,17 @@ const LoginForm = (props) => {
           <div style={{ display: "inline-block" }}>
             <p style={{ textAlign: "justify" }}>
               <span className="type" style={{ "--n": 250 }}>
-                Kaleyra Excel Add-In lets users to send SMS messages directly from their Excel Spreadsheet.
+                Kaleyra Excel Add-In makes it easy to send SMS messages directly from their Excel Spreadsheet in an instant.
               </span>
             </p>
-            <p>
+            {/* <p>
               <span className="type" style={{ "--n": 225 }}>
                 Kaleyra Excel Add-In makes it easy to send personalized texts to all your contacts in an instant.
               </span>
-            </p>
+            </p> */}
             {/* <div style={{ display: "inline-block" }}> */}
             <p className="type" style={{ "--n": 150 }}>
-              You can register for an API Key{" "}
+              If you don't have an existing API Key, you can create an API Key{" "}
               <a href="https://developers.kaleyra.io/docs/generating-an-api-key">here</a>.
             </p>
             {/* </div> */}
