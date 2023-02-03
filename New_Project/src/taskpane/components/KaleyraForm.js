@@ -114,7 +114,7 @@ const KaleyraForm = (props) => {
       })
       .catch(function (error) {
         console.log(error);
-        setErrormessage({ message: `${error?.response?.data?.error?.body}`, var: "danger" });
+        setErrormessage({ message: `${error?.code}:${error?.message}`, var: "danger" });
         setopentoast(true);
         setisloading(false);
       });
@@ -289,50 +289,11 @@ const KaleyraForm = (props) => {
               *The Mobile Number column is required.
             </Alert>
           )}
-          <div style={{ display: "flex" }}>
-            <Controller
-              control={control}
-              name="callbackProfileId"
-              // rules={
-              //   {
-              //     required: true,
-              //   }
-              // }
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  style={{
-                    margin: "8px",
-                    flex: "8 0",
-                  }}
-                  placeholder={"(Optional)Enter Callback Profile ID"}
-                />
-              )}
-            />
-            <div style={{ display: "flex", flex: "2 0", alignItems: "center" }}>
-              <Button
-                size="sm"
-                variant="plain"
-                style={{ "margin-bottom": "8px", height: "fit-content", pointerEvents: "none" }}
-              >
-                Callback Profile ID
-              </Button>
-            </div>
-          </div>
-          {formerrors.callbackProfileId && formerrors.callbackProfileId.type === "required" && (
-            <Alert color="danger" variant="outlined" size="sm">
-              *The Call Back profile ID is required.
-            </Alert>
-          )}
+          
           <div style={{ display: "flex" }}>
             <Controller
               control={control}
               name="Prefix"
-              // rules={
-              //   {
-              //     required: true,
-              //   }
-              // }
               render={({ field }) => (
                 <TextField
                   {...field}
@@ -345,12 +306,12 @@ const KaleyraForm = (props) => {
               )}
             />
             <div style={{ display: "flex", flex: "2 0", alignItems: "center" }}>
-              <Button
+            <Button
                 size="sm"
                 variant="plain"
                 style={{ "margin-bottom": "8px", height: "fit-content", pointerEvents: "none" }}
               >
-                Prefix
+                Prefix     
               </Button>
             </div>
           </div>
@@ -414,6 +375,41 @@ const KaleyraForm = (props) => {
           {formerrors.End_Range && formerrors.End_Range.type === "required" && (
             <Alert color="danger" variant="outlined" size="sm">
               *The End Range of cells are required.
+            </Alert>
+          )}
+          <div style={{ display: "flex" }}>
+            <Controller
+              control={control}
+              name="callbackProfileId"
+              // rules={
+              //   {
+              //     required: true,
+              //   }
+              // }
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  style={{
+                    margin: "8px",
+                    flex: "8 0",
+                  }}
+                  placeholder={"(Optional)Enter Callback Profile ID"}
+                />
+              )}
+            />
+            <div style={{ display: "flex", flex: "2 0", alignItems: "center" }}>
+              <Button
+                size="sm"
+                variant="plain"
+                style={{ "margin-bottom": "8px", height: "fit-content", pointerEvents: "none" }}
+              >
+                Callback Profile ID
+              </Button>
+            </div>
+          </div>
+          {formerrors.callbackProfileId && formerrors.callbackProfileId.type === "required" && (
+            <Alert color="danger" variant="outlined" size="sm">
+              *The Call Back profile ID is required.
             </Alert>
           )}
           {!isLoading && (
