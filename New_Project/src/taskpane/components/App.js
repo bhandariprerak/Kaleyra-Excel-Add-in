@@ -17,46 +17,46 @@ class App extends React.Component {
     };
   }
 
-  componentDidMount() {
-    this.setState({
-      listItems: [
-        {
-          icon: "Ribbon",
-          primaryText: "Achieve more with Office integration",
-        },
-        {
-          icon: "Unlock",
-          primaryText: "Unlock features and functionality",
-        },
-        {
-          icon: "Design",
-          primaryText: "Create and visualize like a pro",
-        },
-      ],
-    });
-  }
+  // componentDidMount() {
+  //   this.setState({
+  //     listItems: [
+  //       {
+  //         icon: "Ribbon",
+  //         primaryText: "Achieve more with Office integration",
+  //       },
+  //       {
+  //         icon: "Unlock",
+  //         primaryText: "Unlock features and functionality",
+  //       },
+  //       {
+  //         icon: "Design",
+  //         primaryText: "Create and visualize like a pro",
+  //       },
+  //     ],
+  //   });
+  // }
 
-  click = async () => {
-    try {
-      await Excel.run(async (context) => {
-        /**
-         * Insert your Excel code here
-         */
-        const range = context.workbook.getSelectedRange();
+  // click = async () => {
+  //   try {
+  //     await Excel.run(async (context) => {
+  //       /**
+  //        * Insert your Excel code here
+  //        */
+  //       const range = context.workbook.getSelectedRange();
 
-        // Read the range address
-        range.load("address");
+  //       // Read the range address
+  //       range.load("address");
 
-        // Update the fill color
-        range.format.fill.color = "yellow";
+  //       // Update the fill color
+  //       range.format.fill.color = "yellow";
 
-        await context.sync();
-        console.log(`The range address was ${range.address}.`);
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  //       await context.sync();
+  //       console.log(`The range address was ${range.address}.`);
+  //     });
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   render() {
     const { title, isOfficeInitialized, loggedin } = this.props;
@@ -65,7 +65,7 @@ class App extends React.Component {
       return (
         <Progress
           title={title}
-          logo={require("./../../../assets/logo-filled.png")}
+          logo={require("./../../../assets/Kaleyra.png")}
           message="Please sideload your addin to see app body."
         />
       );
@@ -73,7 +73,7 @@ class App extends React.Component {
 
     return (
       <div>
-        <Header logo={require("./../../../assets/Kaleyra_Logo_Logo.jpg")} title={this.props.title} message="Welcome" />
+        <Header logo={require("./../../../assets/Kaleyra-Logo.png")} title={this.props.title} message="Welcome" />
         {!loggedin ? <LoginForm /> : <UpdatedKaleyraForm />}
       </div>
     );

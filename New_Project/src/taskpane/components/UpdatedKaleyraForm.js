@@ -37,9 +37,9 @@ const UpdatedKaleyraForm = (props) => {
   }, [template]);
 
   return (
-    <div style={{ position: "relative" }}>
+    <div style={{ position: "relative"}}>
       <img
-        src="../../../assets/Homepage-BG.jpg"
+        src="../../../assets/bg3.jpg"
         style={{ position: "absolute", "z-index": "-1", opacity: "0.35", top: "0" }}
       />
       <div style={{ width: "80%", margin: "auto", paddingBottom: "75px" }}>

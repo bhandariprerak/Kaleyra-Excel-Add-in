@@ -90,15 +90,17 @@ const LoginForm = (props) => {
     <div>
       <div
         style={{
-          width: "80%",
+          width: "100%",
           margin: "auto",
           paddingBottom: "75px",
         }}
       >
         <img
-          src="../../../assets/background2.png"
-          // src="../../../assets/Homepage-BG.jpg"
-          style={{ position: "absolute", "z-index": "-1", opacity:"1", top: "0" }}
+          // src="../../../assets/background2.png"
+          // src="../../../assets/Login-BG1.jpg"
+          // src="../../../assets/Homepage-BG1.jpg"
+          src="../../../assets/bg4.png"
+          style={{ position: "absolute", "z-index": "-1", opacity:"0.8", top: "0", height:"100%" }}
         />
         <div
           style={{
