@@ -8,7 +8,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Contoso Task Pane Add-in</title>
+    <title>Kaleyra MS Excel Add-in</title>
 
     <!-- Office JavaScript API -->
     <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js"></script>
@@ -19,78 +19,87 @@
     <!-- Template styles -->
     <link  rel="stylesheet" href="taskpane.css"/>
     <style>
+      .type {
+        font-family: monospace;
+        color: #0000;
+        background: linear-gradient(-90deg, #002efc 5px, #0000 0) 10px 0, linear-gradient(#002efc 0 0) 0 0;
+        background-size: calc(var(--n) * 1ch) 200%;
+        -webkit-background-clip: padding-box, text;
+        background-clip: padding-box, text;
+        background-repeat: no-repeat;
+        animation: b 0.7s infinite steps(1), t calc(var(--n) * 0.05s) steps(var(--n)) forwards;
+      }
+      @keyframes t {
+        from {
+          background-size: 0 200%;
+        }
+      }
+      @keyframes b {
+        50% {
+          background-position: 0 -100%, 0 0;
+        }
+      }
+      .button {
+        border-radius: 4px;
+        background-color: #0884f8;
+        border-radius: 10px;
+        border: none;
+        color: #ffffff;
+        text-align: center;
+        font-size: large;
+        font-weight: 700;
+        padding: 10px;
+        width: 120px;
+        transition: all 0.5s;
+        cursor: pointer;
+        margin: 5px;
+      }
 
-.type {
-  font-family: monospace;
-  color:#0000;
-  background:
-    linear-gradient(-90deg,#002efc 5px,#0000 0) 10px 0,
-    linear-gradient(#002efc 0 0) 0 0;
-  background-size:calc(var(--n)*1ch) 200%;
-  -webkit-background-clip:padding-box,text;
-  background-clip:padding-box,text;
-  background-repeat:no-repeat;
-  animation: 
-    b .7s infinite steps(1),   
-    t calc(var(--n)*.05s) steps(var(--n)) forwards;
-}
-@keyframes t{
-  from {background-size:0 200%}
-}
-@keyframes b{
-  50% {background-position:0 -100%,0 0}
-}
-.button {
-  border-radius: 4px;
-  background-color: #64b1fa;
-  border-radius: 10px;
-  border:none;
-  color: #FFFFFF;
-  text-align: center;
-  font-size: large;
-  font-weight: 700;
-  padding: 10px;
-  width: 120px;
-  transition: all 0.5s;
-  cursor: pointer;
-  margin: 5px;
-}
+      .button:hover {
+        color: #64b1fa;
+        background-color: white;
+        border: 2px solid #64b1fa;
+      }
 
-.button:hover{
-  color: #64b1fa;
-  background-color: white;
-  border: 2px solid #64b1fa;
-}
+      .button span {
+        cursor: pointer;
+        display: inline-block;
+        position: relative;
+        transition: 0.5s;
+      }
 
-.button span {
-  cursor: pointer;
-  display: inline-block;
-  position: relative;
-  transition: 0.5s;
-}
+      .button span:after {
+        content: " >>";
+        position: absolute;
+        opacity: 0;
+        top: 0;
+        right: -20px;
+        transition: 0.5s;
+      }
 
-.button span:after {
-  content: ' >>';
-  position: absolute;
-  opacity: 0;
-  top: 0;
-  right: -20px;
-  transition: 0.5s;
-}
+      .button:hover span {
+        padding-right: 30px;
+      }
 
-.button:hover span {
-  padding-right: 30px;
-}
+      .button:hover span:after {
+        opacity: 1;
+        right: 0;
+      }
 
-.button:hover span:after {
-  opacity: 1;
-  right: 0;
-}
+      .togglebutton {
+        margin: 8px;
+      }
+
+      .divbg{
+        background-image: url(../../assets/bg4.png);
+        min-height: 100vh;
+      }
+
     </style>
     
 </head>
 
-<body class="ms-font-m ms-Fabric">
+<body class="ms-font-m ms-Fabric" style="margin: 0px">
     <div id="container"></div>
 </body>
 

@@ -11,7 +11,7 @@ initializeIcons();
 
 let isOfficeInitialized = false;
 
-const title = "Kaleyra Add In";
+const title = "Kaleyra Add-In";
 
 const render = (Component) => {
   ReactDOM.render(
