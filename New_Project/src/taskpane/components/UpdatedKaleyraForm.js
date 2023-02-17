@@ -15,6 +15,7 @@ const UpdatedKaleyraForm = (props) => {
   const [formatedTemplates, setformattedTemplates] = useState([]);
   const [template, settemplate] = useState({});
   const [loading, setloading] = useState(false);
+  const [urltemplate, seturltemplate] = useState(false);
 
   useEffect(() => {
     const formatted_template_options = [];
@@ -30,6 +31,10 @@ const UpdatedKaleyraForm = (props) => {
   useEffect(() => {
     if (Object.keys(template).length !== 0 && Object.keys(senderid).length !== 0) {
       setloading(true);
+      let str = template?.content;
+      if (str.includes("{URL}") || str.includes("{url}")) {
+        seturltemplate(true);
+      }
       setTimeout(() => {
         setloading(false);
       }, 2000);
@@ -37,12 +42,8 @@ const UpdatedKaleyraForm = (props) => {
   }, [template]);
 
   return (
-    <div style={{ position: "relative"}}>
-      <img
-        src="../../../assets/bg3.jpg"
-        style={{ position: "absolute", "z-index": "-1", opacity: "0.35", top: "0" }}
-      />
-      <div style={{ width: "80%", margin: "auto", paddingBottom: "75px" }}>
+    <div>
+      <div style={{ width: "80%", margin: "auto", paddingBottom: "75px", maxWidth: "450px" }}>
         {/* <img
           src="../../../assets/Homepage-BG.jpg"
           style={{ position: "absolute", "z-index": "-1", opacity: "0.35", top: "0" }}
@@ -94,7 +95,7 @@ const UpdatedKaleyraForm = (props) => {
                 variant="plain"
                 style={{ "margin-bottom": "8px", height: "fit-content", pointerEvents: "none" }}
               >
-                Select Template
+                Template
               </Button>
             </div>
           </div>
@@ -113,12 +114,9 @@ const UpdatedKaleyraForm = (props) => {
             (loading ? (
               <LinearProgress style={{ margin: "10px" }} />
             ) : (
-              <KaleyraForm template={template} sender_id={senderid} />
+              <KaleyraForm template={template} sender_id={senderid} isurlpresent={urltemplate} />
             ))}
         </div>
-      </div>
-      <div style={{ position: "fixed", width: "100%", bottom: "0" }}>
-        <KaleyraFooter />
       </div>
     </div>
   );

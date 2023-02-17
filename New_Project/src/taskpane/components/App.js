@@ -72,9 +72,12 @@ class App extends React.Component {
     }
 
     return (
-      <div>
+      <div className="divbg">
         <Header logo={require("./../../../assets/Kaleyra-Logo.png")} title={this.props.title} message="Welcome" />
         {!loggedin ? <LoginForm /> : <UpdatedKaleyraForm />}
+        <div style={{ position: "fixed", width: "100%", bottom: "0" }}>
+          <KaleyraFooter />
+        </div>
       </div>
     );
   }

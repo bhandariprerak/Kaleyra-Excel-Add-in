@@ -46,13 +46,16 @@ const LoginForm = (props) => {
     axios(config)
       .then(function (response) {
         props.submitkeys({ ...data, login: true, sender_ids: response.data.data });
-        setisloading(false);
+        // setisloading(false);
         Load_Template(data);
         formated_sender_id(response.data.data);
       })
       .catch(function (error) {
         setopentoast(true);
-        setErrormessage({ message: error?.response?.data?.error.error, var: "danger" });
+        setErrormessage({
+          message: `${error?.response?.data?.code}: ${error?.response?.data?.message}`,
+          var: "danger",
+        });
         setisloading(false);
       });
   };
@@ -70,11 +73,16 @@ const LoginForm = (props) => {
     axios(config_template)
       .then(function (response) {
         props.storeTemplate(response.data.data);
+        setisloading(false);
       })
       .catch(function (error) {
         console.log(error);
+        setisloading(false);
         setopentoast(true);
-        setErrormessage({ message: error?.response?.data?.error.error, var: "danger" });
+        setErrormessage({
+          message: `${error?.response?.data?.code}: ${error?.response?.data?.message}`,
+          var: "danger",
+        });
       });
   };
 
@@ -93,15 +101,13 @@ const LoginForm = (props) => {
           width: "100%",
           margin: "auto",
           paddingBottom: "75px",
+          maxWidth: "450px",
         }}
       >
-        <img
-          // src="../../../assets/background2.png"
-          // src="../../../assets/Login-BG1.jpg"
-          // src="../../../assets/Homepage-BG1.jpg"
+        {/* <img
           src="../../../assets/bg4.png"
           style={{ position: "absolute", "z-index": "-1", opacity:"0.8", top: "0", height:"100%" }}
-        />
+        /> */}
         <div
           style={{
             dispaly: "flex",
@@ -166,11 +172,14 @@ const LoginForm = (props) => {
                 </Button>
               </div>
             </div>
+            <div style={{ display: "flex" }}>
             {formerrors.apiKey && formerrors.apiKey.type === "required" && (
-              <Alert color="danger" variant="outlined" size="sm">
+              <Alert color="danger" variant="outlined" size="sm" style={{ backgroundColor: "white", flex: "8 0" }}>
                 *The API Key is required.
               </Alert>
             )}
+            <div style={{ flex: "2 1" }}></div>
+          </div>
             <div style={{ display: "flex" }}>
               <Controller
                 control={control}
@@ -199,11 +208,14 @@ const LoginForm = (props) => {
                 </Button>
               </div>
             </div>
+            <div style={{ display: "flex" }}>
             {formerrors.sidKey && formerrors.sidKey.type === "required" && (
-              <Alert color="danger" variant="outlined" size="sm">
+              <Alert color="danger" variant="outlined" size="sm" style={{ backgroundColor: "white", flex: "8 0" }}>
                 *The SID is required.
               </Alert>
             )}
+            <div style={{ flex: "2 1" }}></div>
+          </div>
             {!isLoading && (
               <div>
                 <button class="button" onClick={handleSubmit(onSubmitLogin)}>
@@ -224,10 +236,11 @@ const LoginForm = (props) => {
           </Alert>
         </Snackbar>
       </div>
-      <div style={{ position: "fixed", width: "100%", bottom: "0" }}>
-        <KaleyraFooter />
-      </div>
     </div>
+      // <div style={{ position: "fixed", width: "100%", bottom: "0" }}>
+      //   <KaleyraFooter />
+      // </div>
+    // </div>
   );
 };
 

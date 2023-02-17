@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import { useForm, Controller, useFieldArray } from "react-hook-form";
+import { useForm, Controller, useFieldArray, FormProvider } from "react-hook-form";
 import { Button, Alert, TextField } from "@mui/joy";
 import { useEffect } from "react";
 import { CssVarsProvider } from "@mui/joy/styles";
 import { Snackbar, LinearProgress } from "@mui/material";
 import { connect } from "react-redux";
+import RenderTooltip from "./RenderTooltip";
+import UrlForm from "./UrlForm";
 import axios from "axios";
 
 const KaleyraForm = (props) => {
@@ -74,11 +76,6 @@ const KaleyraForm = (props) => {
 
     console.log("Prepared replaceables");
 
-    // making the batch of 500
-    // var i = 0;
-    // for(let j=0; j< Map_Ranges.length; j++){ 
-      // var batchData = Map_Ranges.slice(i, i+500);
-
     const final_body = prepare_sms_body(Map_Ranges, str);
     // const final_body = prepare_sms_body(batchData, str);
 
@@ -89,6 +86,12 @@ const KaleyraForm = (props) => {
       from: props.sender_id.value,
       template_id: `${props.template?.template_id}`,
       unicode: "Auto",
+      url_data: {
+        shorten_url: data.shortenurl,
+        url: data.urlinput ? data.urlinput : "",
+        slug: data.slug_url ? data.slug_url  : "",
+        track_user: data.trackuser,
+      },
       callback_profile_id: data.callbackProfileId,
       prefix: data.Prefix,
       sms: final_body,
@@ -108,13 +111,16 @@ const KaleyraForm = (props) => {
 
     axios(config)
       .then(function (response) {
-        setErrormessage({ message: "successfully submitted!", var: "success" });
+        setErrormessage({ message: "Successfully submitted!", var: "success" });
         setopentoast(true);
         setisloading(false);
       })
       .catch(function (error) {
         console.log(error);
-        setErrormessage({ message: `${error?.code}:${error?.message}`, var: "danger" });
+        setErrormessage({
+          message: `${error?.response?.data?.error?.code}: ${error?.response?.data?.error?.message}`,
+          var: "danger",
+        });
         setopentoast(true);
         setisloading(false);
       });
@@ -173,13 +179,14 @@ const KaleyraForm = (props) => {
           : message,
       });
     });
-    console.log("Final message body prepared");
+    console.log("Final message body is ready");
     return final_sms_body;
   };
 
   return (
     <div>
-      <CssVarsProvider>
+      {/* <CssVarsProvider> */}
+      <FormProvider control={control} formerrors={formerrors} setValue={setValue}>
         <form onSubmit={handleSubmit(onSubmit)}>
           {basereplace?.length != 0 &&
             fields.map((item, index) => {
@@ -208,9 +215,6 @@ const KaleyraForm = (props) => {
                     <Controller
                       control={control}
                       name={`replaceables[${index}].defaultValue`}
-                      // rules={{
-                      //   required: true,
-                      // }}
                       render={({ field }) => (
                         <TextField
                           {...field}
@@ -219,7 +223,7 @@ const KaleyraForm = (props) => {
                             flex: "4 0",
                             "min-width": "100px",
                           }}
-                          placeholder={"Enter default Value"}
+                          placeholder={"(Optional) Enter Default Value"}
                           className={`no-form-error ${formerrors.replaceables?.[index]?.value ? "form-error" : ""}`}
                         />
                       )}
@@ -241,21 +245,19 @@ const KaleyraForm = (props) => {
                       </Button>
                     </div>
                   </div>
+                  <div style={{ display: "flex" }}>
                   {formerrors.replaceables?.[index]?.value &&
                     formerrors.replaceables?.[index]?.value.type === "required" && (
-                      <Alert color="danger" variant="outlined" size="sm">
+                      <Alert color="danger" variant="outlined" size="sm" style={{ backgroundColor: "white", flex: "8 0" }}>
                         *The {item.label} is required.
                       </Alert>
                     )}
-                  {formerrors.replaceables?.[index]?.defaultValue &&
-                    formerrors.replaceables?.[index]?.defaultValue.type === "required" && (
-                      <Alert color="danger" variant="outlined" size="sm">
-                        *The default value for {item.label} is required.
-                      </Alert>
-                    )}
+                    <div style={{ flex: "2 1" }}></div>
+                  </div>
                 </div>
               );
             })}
+          {props.isurlpresent ? <UrlForm /> : <></>}
           <div style={{ display: "flex" }}>
             <Controller
               control={control}
@@ -270,7 +272,7 @@ const KaleyraForm = (props) => {
                     margin: "8px",
                     flex: "8 0",
                   }}
-                  placeholder={"Enter Column"}
+                  placeholder={"Enter Column Of Mobile Number(s)"}
                 />
               )}
             />
@@ -280,16 +282,21 @@ const KaleyraForm = (props) => {
                 variant="plain"
                 style={{ "margin-bottom": "8px", height: "fit-content", pointerEvents: "none" }}
               >
-                Mobile Number
+                Mobile Number(s)
               </Button>
             </div>
+            <div>
+              <RenderTooltip content="Provide the column where Mobile Number(s) is/are listed." />
+            </div>
           </div>
+          <div style={{ display: "flex" }}>
           {formerrors.mobileNumber && formerrors.mobileNumber.type === "required" && (
-            <Alert color="danger" variant="outlined" size="sm">
-              *The Mobile Number column is required.
+            <Alert color="danger" variant="outlined" size="sm" style={{ backgroundColor: "white", flex: "8 0" }}>
+              *The Mobile Number(s) column is required.
             </Alert>
           )}
-          
+          <div style={{ flex: "2 1" }}></div>
+          </div>
           <div style={{ display: "flex" }}>
             <Controller
               control={control}
@@ -301,7 +308,7 @@ const KaleyraForm = (props) => {
                     margin: "8px",
                     flex: "8 0",
                   }}
-                  placeholder={"(Optional)Enter Prefix"}
+                  placeholder={"(Optional) Enter Prefix"}
                 />
               )}
             />
@@ -314,12 +321,10 @@ const KaleyraForm = (props) => {
                 Prefix     
               </Button>
             </div>
+            <div>
+              <RenderTooltip content="Prefix field holds country code as a value. If defined it is pre-pended for all the Mobile Numbers." />
+            </div>
           </div>
-          {formerrors.callbackProfileId && formerrors.callbackProfileId.type === "required" && (
-            <Alert color="danger" variant="outlined" size="sm">
-              *The Call Back profile ID is required.
-            </Alert>
-          )}
           <div style={{ display: "flex" }}>
             <Controller
               control={control}
@@ -335,7 +340,7 @@ const KaleyraForm = (props) => {
                     flex: "4 0",
                     "min-width": "100px",
                   }}
-                  placeholder={"Start"}
+                  placeholder={"Enter Start Row"}
                 />
               )}
             />
@@ -353,7 +358,7 @@ const KaleyraForm = (props) => {
                     flex: "4 0",
                     "min-width": "100px",
                   }}
-                  placeholder={"End"}
+                  placeholder={"Enter End Row"}
                 />
               )}
             />
@@ -363,29 +368,30 @@ const KaleyraForm = (props) => {
                 variant="plain"
                 style={{ "margin-bottom": "8px", height: "fit-content", pointerEvents: "none" }}
               >
-                Enter Range
+                Range
               </Button>
             </div>
+            <div>
+              <RenderTooltip content="Range field contains the range of row(s) from your sheet for your campaign. Start and End rows are inclusive." />
+            </div>
           </div>
+          <div style={{ display: "flex" }}>
           {formerrors.Start_Range && formerrors.Start_Range.type === "required" && (
-            <Alert color="danger" variant="outlined" size="sm">
-              *The Start Range of cells are required.
+            <Alert color="danger" variant="outlined" size="sm" style={{ backgroundColor: "white", flex: "4 0" }}>
+              *The starting row number for range is required.
             </Alert>
           )}
           {formerrors.End_Range && formerrors.End_Range.type === "required" && (
-            <Alert color="danger" variant="outlined" size="sm">
-              *The End Range of cells are required.
+            <Alert color="danger" variant="outlined" size="sm" style={{ backgroundColor: "white", flex: "4 0" }}>
+              *The ending row number for range is required.
             </Alert>
           )}
-          <div style={{ display: "flex" }}>
+          <div style={{ flex: "2 1" }}></div>
+          </div>
+          <div style={{ display: "flex"}}>
             <Controller
               control={control}
               name="callbackProfileId"
-              // rules={
-              //   {
-              //     required: true,
-              //   }
-              // }
               render={({ field }) => (
                 <TextField
                   {...field}
@@ -393,7 +399,7 @@ const KaleyraForm = (props) => {
                     margin: "8px",
                     flex: "8 0",
                   }}
-                  placeholder={"(Optional)Enter Callback Profile ID"}
+                  placeholder={"(Optional) Enter Callback Profile ID"}
                 />
               )}
             />
@@ -406,12 +412,10 @@ const KaleyraForm = (props) => {
                 Callback Profile ID
               </Button>
             </div>
+            <div>
+              <RenderTooltip content="If you wish to receive callbacks on your desired callback URL, provide the callback profile ID as set up in your account." />
+            </div>
           </div>
-          {formerrors.callbackProfileId && formerrors.callbackProfileId.type === "required" && (
-            <Alert color="danger" variant="outlined" size="sm">
-              *The Call Back profile ID is required.
-            </Alert>
-          )}
           {!isLoading && (
             <div>
               <button class="button" onClick={handleSubmit(onSubmit)}>
@@ -420,7 +424,8 @@ const KaleyraForm = (props) => {
             </div>
           )}
         </form>
-      </CssVarsProvider>
+      </FormProvider>
+      {/* </CssVarsProvider> */}
       {isLoading && (
         <div>
           <LinearProgress />
